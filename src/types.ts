@@ -21,13 +21,35 @@ export interface TestmoTestCase {
   custom_fields?: Record<string, unknown>;
 }
 
-export interface TestmoCreateCaseInput {
-  title: string;
-  priority?: number;
+export interface TestmoCaseCustomFields {
+  custom_priority?: number;
+  custom_description?: string;
+  custom_expected?: string;
+  custom_preconditions?: string;
+  custom_steps?: Array<{ text1: string; text3?: string }>;
+  [key: string]: unknown;
+}
+
+export interface TestmoCreateCaseInput extends TestmoCaseCustomFields {
+  name: string;
   type?: number;
   template?: number;
   folder_id?: number;
-  custom_fields?: Record<string, unknown>;
+  state_id?: number;
+  estimate?: number;
+  tags?: string[];
+  issues?: number[];
+}
+
+export interface TestmoUpdateCasesInput extends TestmoCaseCustomFields {
+  ids: number[];
+  name?: string;
+  folder_id?: number;
+  state_id?: number;
+  status_id?: number;
+  estimate?: number;
+  tags?: string[];
+  issues?: number[];
 }
 
 export interface TestmoFolder {
