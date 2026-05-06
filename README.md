@@ -105,9 +105,47 @@ Then in Cursor: open **Settings → MCP** and verify the server shows a green st
 |------|-------------|
 | `list_cases` | List test cases (supports pagination and folder filtering) |
 | `get_case` | Get details of a specific test case |
-| `create_case` | Create a new test case |
-| `update_cases` | Update test cases in bulk (up to 100) |
+| `create_case` | Create a new test case with full field support (see below) |
+| `update_cases` | Update test cases in bulk — same values applied to all specified IDs (see below) |
 | `delete_cases` | Delete test cases in bulk (up to 100) |
+
+#### `create_case` fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `project_id` | number | **Required.** Project ID |
+| `name` | string | **Required.** Test case title |
+| `folder_id` | number | Folder ID |
+| `state_id` | number | State ID |
+| `estimate` | number | Time estimate in seconds |
+| `tags` | string[] | Tags |
+| `issues` | number[] | Linked issue IDs |
+| `custom_priority` | 1–4 | Priority: 1=critical, 2=high, 3=medium, 4=low |
+| `custom_description` | string | Test case description |
+| `custom_preconditions` | string | Preconditions |
+| `custom_expected` | string | Expected result |
+| `custom_steps` | array | Steps: `[{ text1: "step", text3: "expected" }]` |
+
+#### `update_cases` fields
+
+All fields (except `ids`) are optional and applied to **all** specified case IDs.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `project_id` | number | **Required.** Project ID |
+| `ids` | number[] | **Required.** Case IDs to update (up to 100) |
+| `name` | string | New title |
+| `folder_id` | number | New folder ID |
+| `state_id` | number | New state ID |
+| `status_id` | number | New status ID |
+| `estimate` | number | Time estimate in seconds |
+| `tags` | string[] | Tags (replaces existing) |
+| `issues` | number[] | Linked issue IDs |
+| `custom_priority` | 1–4 | Priority: 1=critical, 2=high, 3=medium, 4=low |
+| `custom_description` | string | Test case description |
+| `custom_preconditions` | string | Preconditions |
+| `custom_expected` | string | Expected result |
+| `custom_steps` | array | Steps: `[{ text1: "step", text3: "expected" }]` (replaces existing) |
 
 ### Attachments
 | Tool | Description |

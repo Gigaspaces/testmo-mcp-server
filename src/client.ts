@@ -2,6 +2,7 @@ import type {
   TestmoProject,
   TestmoTestCase,
   TestmoCreateCaseInput,
+  TestmoUpdateCasesInput,
   TestmoFolder,
   TestmoAutomationRun,
   TestmoRunThread,
@@ -131,11 +132,11 @@ export class TestmoClient {
 
   async updateCases(
     projectId: number,
-    cases: Array<{ id: number; title?: string; priority?: number; folder_id?: number; custom_fields?: Record<string, unknown> }>
+    input: TestmoUpdateCasesInput
   ): Promise<{ data: TestmoTestCase[] }> {
     return this.request(`/projects/${projectId}/cases`, {
       method: "PATCH",
-      body: JSON.stringify({ cases }),
+      body: JSON.stringify(input),
     });
   }
 

@@ -152,13 +152,24 @@ server.registerTool(
     description: "Create a new test case in a Testmo project.",
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      title: z.string().min(1).describe("Test case title"),
-      priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
+      name: z.string().min(1).describe("Test case name/title"),
       folder_id: z.number().int().positive().optional().describe("Folder ID"),
+      state_id: z.number().int().positive().optional().describe("State ID"),
+      estimate: z.number().int().nonnegative().optional().describe("Time estimate in seconds"),
+      tags: z.array(z.string()).optional().describe("Tags"),
+      issues: z.array(z.number().int().positive()).optional().describe("Linked issue IDs"),
+      custom_priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
+      custom_description: z.string().optional().describe("Test case description"),
+      custom_preconditions: z.string().optional().describe("Preconditions"),
+      custom_expected: z.string().optional().describe("Expected result"),
+      custom_steps: z.array(z.object({
+        text1: z.string().describe("Step description"),
+        text3: z.string().optional().describe("Expected result for this step"),
+      })).optional().describe("Test steps"),
     },
   },
-  async ({ project_id, title, priority, folder_id }) => {
-    const result = await client.createCase(project_id, { title, priority, folder_id });
+  async ({ project_id, ...fields }) => {
+    const result = await client.createCase(project_id, fields);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   }
 );
@@ -166,19 +177,29 @@ server.registerTool(
 server.registerTool(
   "update_cases",
   {
-    description: "Update one or more test cases in bulk (up to 100).",
+    description: "Update one or more test cases in bulk — same values applied to all specified case IDs (up to 100).",
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      cases: z.array(z.object({
-        id: z.number().int().positive().describe("Case ID"),
-        title: z.string().min(1).optional().describe("New title"),
-        priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
-        folder_id: z.number().int().positive().optional().describe("New folder ID"),
-      })).min(1).max(100).describe("Cases to update"),
+      ids: z.array(z.number().int().positive()).min(1).max(100).describe("Case IDs to update"),
+      name: z.string().min(1).optional().describe("New title"),
+      folder_id: z.number().int().positive().optional().describe("New folder ID"),
+      state_id: z.number().int().positive().optional().describe("New state ID"),
+      status_id: z.number().int().positive().optional().describe("New status ID"),
+      estimate: z.number().int().nonnegative().optional().describe("Time estimate in seconds"),
+      tags: z.array(z.string()).optional().describe("Tags (replaces existing)"),
+      issues: z.array(z.number().int().positive()).optional().describe("Linked issue IDs"),
+      custom_priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
+      custom_description: z.string().optional().describe("Test case description"),
+      custom_preconditions: z.string().optional().describe("Preconditions"),
+      custom_expected: z.string().optional().describe("Expected result"),
+      custom_steps: z.array(z.object({
+        text1: z.string().describe("Step description"),
+        text3: z.string().optional().describe("Expected result for this step"),
+      })).optional().describe("Test steps (replaces existing)"),
     },
   },
-  async ({ project_id, cases }) => {
-    const result = await client.updateCases(project_id, cases);
+  async ({ project_id, ...fields }) => {
+    const result = await client.updateCases(project_id, fields);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   }
 );
