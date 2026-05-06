@@ -1,0 +1,44 @@
+{
+  "name": "testmo-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Model Context Protocol (MCP) server for the Testmo REST API — projects, test cases, folders, automation runs, milestones, users and more.",
+  "main": "dist/server.js",
+  "bin": {
+    "testmo-mcp-server": "dist/server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "testmo",
+    "testing",
+    "qa",
+    "test-management",
+    "claude",
+    "ai"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MateoSocha/testmo-mcp-server"
+  },
+  "homepage": "https://github.com/MateoSocha/testmo-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/MateoSocha/testmo-mcp-server/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5"
+  }
+}
