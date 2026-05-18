@@ -213,6 +213,91 @@ All fields (except `ids`) are optional and applied to **all** specified case IDs
 | `list_roles` | List all user roles |
 | `get_role` | Get details of a specific role |
 
+## Example prompts
+
+Once connected, you can ask Claude things like:
+
+### Explore your workspace
+
+```
+List all Testmo projects and show me their IDs and names.
+```
+```
+Who am I logged in as? Show my name and role.
+```
+```
+List all folders in project 3, including their IDs and parent folders.
+```
+```
+How many test cases are in project 3? Break the count down by folder.
+```
+
+### Work with test cases
+
+```
+Show me the 10 most recently updated test cases in project 3.
+```
+```
+Get the full details of test case 1234, including all steps and custom fields.
+```
+```
+Create a test case in project 3 called "Verify checkout with a promo code" with:
+- priority: high
+- folder: 42
+- preconditions: User has an active cart with at least one item
+- steps:
+    1. Apply a valid promo code → discount is shown in the order summary
+    2. Click Place Order → order confirmation page is displayed
+```
+```
+Move all test cases with IDs 101, 102, 103 to folder 55 in project 3.
+```
+```
+Update test cases 201 and 202 to set priority to critical and add the tag "regression".
+```
+```
+Delete test cases 301, 302, and 303 from project 3.
+```
+
+### Manage folders
+
+```
+Create a folder structure in project 3:
+- "API Tests" as a top-level folder
+  - "Auth" as a subfolder
+  - "Orders" as a subfolder
+  - "Users" as a subfolder
+```
+```
+Rename folder 15 to "E2E Tests" in project 3.
+```
+
+### Automation runs
+
+```
+List the last 10 automation runs in project 3 and show their status (open / complete / aborted).
+```
+```
+Create a new automation run called "Nightly CI — 2026-05-18" in project 3, then mark it as complete.
+```
+```
+Show me the test results for automation run 77 in project 3.
+```
+
+### Multi-step workflows
+
+```
+In project 3, create 5 test cases for the user registration flow.
+Each case should have a descriptive name, 2–3 steps, and be placed in folder 12.
+Use high priority for the happy path and medium for edge cases.
+```
+```
+Find all automation runs in project 3 that are still open and complete them.
+```
+```
+Show me a summary of project 3: number of folders, total test cases, open runs, and active milestones.
+```
+
 ## Project structure
 
 ```
