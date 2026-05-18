@@ -32,19 +32,24 @@ npm run build
 
 ### 2. Register with Claude Code
 
-Open `~/.claude.json` and locate your project entry under `projects`. Add the `testmo` block to its `mcpServers` object:
+The fastest way is to copy `.mcp.json` from this repo into your project root — Claude Code picks it up automatically:
 
 ```json
-"testmo": {
-  "type": "stdio",
-  "command": "node",
-  "args": ["/absolute/path/to/testmo-mcp-server/dist/server.js"],
-  "env": {
-    "TESTMO_BASE_URL": "https://<your-instance>.testmo.net",
-    "TESTMO_ACCESS_TOKEN": "<your-api-token>"
+{
+  "mcpServers": {
+    "testmo": {
+      "command": "node",
+      "args": ["/absolute/path/to/testmo-mcp-server/dist/server.js"],
+      "env": {
+        "TESTMO_BASE_URL": "https://<your-instance>.testmo.net",
+        "TESTMO_ACCESS_TOKEN": "<your-api-token>"
+      }
+    }
   }
 }
 ```
+
+Alternatively, add the `testmo` block to `~/.claude/settings.json` under `mcpServers` for a global registration (available in every project).
 
 Replace `/absolute/path/to/testmo-mcp-server` with the actual path where you cloned this repo.
 
@@ -214,13 +219,20 @@ All fields (except `ids`) are optional and applied to **all** specified case IDs
 src/
 ├── server.ts   — MCP server entry point, tool registration
 ├── client.ts   — HTTP wrapper for the Testmo REST API
+├── env.ts      — Environment variable validation (Zod)
 └── types.ts    — TypeScript interfaces for API responses
+tests/
+└── manual/
+    └── test-plan.md  — Manual test cases with ready-to-use prompts
 ```
 
 ## Development
 
 ```bash
-# Rebuild after changes to src/
+# Watch mode — recompiles on every file save
+npm run dev
+
+# One-off build
 npm run build
 
 # Verify the server starts correctly

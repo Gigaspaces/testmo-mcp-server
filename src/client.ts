@@ -22,18 +22,23 @@ export class TestmoClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
 
-  constructor(baseUrl: string, token: string) {
+  constructor(baseUrl: string, token: string, version: string) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     this.headers = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
       Accept: "application/json",
+      "User-Agent": `testmo-mcp-server/${version} Node/${process.version}`,
     };
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}/api/v1${path}`;
-    const res = await fetch(url, { ...options, headers: this.headers });
+    const res = await fetch(url, {
+      ...options,
+      headers: this.headers,
+      signal: AbortSignal.timeout(30_000),
+    });
 
     if (!res.ok) {
       const body = await res.text().catch(() => "");
@@ -41,7 +46,8 @@ export class TestmoClient {
     }
 
     if (res.status === 204) return {} as T;
-    return res.json() as Promise<T>;
+    const ct = res.headers.get("content-type") ?? "";
+    return (ct.includes("application/json") ? res.json() : res.text()) as Promise<T>;
   }
 
   private buildQuery(params: Record<string, string | number | undefined>): string {

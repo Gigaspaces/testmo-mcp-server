@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "testmo": {
+      "command": "node",
+      "args": ["dist/server.js"],
+      "env": {
+        "TESTMO_BASE_URL": "https://your-instance.testmo.net",
+        "TESTMO_ACCESS_TOKEN": ""
+      }
+    }
+  }
+}
