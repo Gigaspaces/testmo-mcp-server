@@ -7,7 +7,9 @@ const envSchema = z.object({
 
 const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
-  process.stderr.write(`[testmo] Invalid config:\n${JSON.stringify(parsed.error.format(), null, 2)}\n`);
+  process.stderr.write(
+    `[testmo] Invalid config:\n${JSON.stringify(parsed.error.format(), null, 2)}\n`
+  );
   process.exit(1);
 }
 

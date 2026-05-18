@@ -188,10 +188,9 @@ export class TestmoClient {
   }
 
   async completeRun(projectId: number, runId: number): Promise<void> {
-    await this.request(
-      `/projects/${projectId}/automation/runs/${runId}/complete`,
-      { method: "POST" }
-    );
+    await this.request(`/projects/${projectId}/automation/runs/${runId}/complete`, {
+      method: "POST",
+    });
   }
 
   async createRunThread(
@@ -199,10 +198,10 @@ export class TestmoClient {
     runId: number,
     input: { name: string }
   ): Promise<{ data: TestmoRunThread }> {
-    return this.request(
-      `/projects/${projectId}/automation/runs/${runId}/threads`,
-      { method: "POST", body: JSON.stringify(input) }
-    );
+    return this.request(`/projects/${projectId}/automation/runs/${runId}/threads`, {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
   }
 
   async appendToRun(
@@ -227,9 +226,7 @@ export class TestmoClient {
     params?: { page?: number; limit?: number }
   ): Promise<TestmoPaginatedResponse<TestmoRunResult>> {
     const query = this.buildQuery({ page: params?.page, limit: params?.limit });
-    return this.request(
-      `/projects/${projectId}/automation/runs/${runId}/results${query}`
-    );
+    return this.request(`/projects/${projectId}/automation/runs/${runId}/results${query}`);
   }
 
   // ── Test Runs (manual) ────────────────────────────────────────────────────────
@@ -274,10 +271,7 @@ export class TestmoClient {
     return this.request(`/projects/${projectId}/milestones${query}`);
   }
 
-  async getMilestone(
-    projectId: number,
-    milestoneId: number
-  ): Promise<{ data: TestmoMilestone }> {
+  async getMilestone(projectId: number, milestoneId: number): Promise<{ data: TestmoMilestone }> {
     return this.request(`/projects/${projectId}/milestones/${milestoneId}`);
   }
 
@@ -287,9 +281,10 @@ export class TestmoClient {
     return this.request("/user");
   }
 
-  async listUsers(
-    params?: { page?: number; limit?: number }
-  ): Promise<TestmoPaginatedResponse<TestmoUser>> {
+  async listUsers(params?: {
+    page?: number;
+    limit?: number;
+  }): Promise<TestmoPaginatedResponse<TestmoUser>> {
     const query = this.buildQuery({ page: params?.page, limit: params?.limit });
     return this.request(`/users${query}`);
   }
