@@ -95,10 +95,16 @@ server.registerTool(
     description: "Create one or more folders in a Testmo project (up to 100).",
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      folders: z.array(z.object({
-        name: z.string().min(1).describe("Folder name"),
-        parent_id: z.number().int().positive().optional().describe("Parent folder ID"),
-      })).min(1).max(100).describe("Folders to create"),
+      folders: z
+        .array(
+          z.object({
+            name: z.string().min(1).describe("Folder name"),
+            parent_id: z.number().int().positive().optional().describe("Parent folder ID"),
+          })
+        )
+        .min(1)
+        .max(100)
+        .describe("Folders to create"),
     },
   },
   withErrorRecovery("create_folders", async ({ project_id, folders }) => {
@@ -114,11 +120,17 @@ server.registerTool(
     description: "Update one or more folders in bulk (up to 100).",
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      folders: z.array(z.object({
-        id: z.number().int().positive().describe("Folder ID"),
-        name: z.string().min(1).optional().describe("New folder name"),
-        parent_id: z.number().int().positive().optional().describe("New parent folder ID"),
-      })).min(1).max(100).describe("Folders to update"),
+      folders: z
+        .array(
+          z.object({
+            id: z.number().int().positive().describe("Folder ID"),
+            name: z.string().min(1).optional().describe("New folder name"),
+            parent_id: z.number().int().positive().optional().describe("New parent folder ID"),
+          })
+        )
+        .min(1)
+        .max(100)
+        .describe("Folders to update"),
     },
   },
   withErrorRecovery("update_folders", async ({ project_id, folders }) => {
@@ -135,7 +147,11 @@ server.registerTool(
     annotations: { destructiveHint: true },
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      folder_ids: z.array(z.number().int().positive()).min(1).max(100).describe("Folder IDs to delete"),
+      folder_ids: z
+        .array(z.number().int().positive())
+        .min(1)
+        .max(100)
+        .describe("Folder IDs to delete"),
     },
   },
   withErrorRecovery("delete_folders", async ({ project_id, folder_ids }) => {
@@ -193,14 +209,25 @@ server.registerTool(
       estimate: z.number().int().nonnegative().optional().describe("Time estimate in seconds"),
       tags: z.array(z.string()).optional().describe("Tags"),
       issues: z.array(z.number().int().positive()).optional().describe("Linked issue IDs"),
-      custom_priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
+      custom_priority: z
+        .number()
+        .int()
+        .min(1)
+        .max(4)
+        .optional()
+        .describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
       custom_description: z.string().optional().describe("Test case description"),
       custom_preconditions: z.string().optional().describe("Preconditions"),
       custom_expected: z.string().optional().describe("Expected result"),
-      custom_steps: z.array(z.object({
-        text1: z.string().describe("Step description"),
-        text3: z.string().optional().describe("Expected result for this step"),
-      })).optional().describe("Test steps"),
+      custom_steps: z
+        .array(
+          z.object({
+            text1: z.string().describe("Step description"),
+            text3: z.string().optional().describe("Expected result for this step"),
+          })
+        )
+        .optional()
+        .describe("Test steps"),
     },
   },
   withErrorRecovery("create_case", async ({ project_id, ...fields }) => {
@@ -213,7 +240,8 @@ server.registerTool(
   "update_cases",
   {
     title: "Update Cases",
-    description: "Update one or more test cases in bulk — same values applied to all specified case IDs (up to 100).",
+    description:
+      "Update one or more test cases in bulk — same values applied to all specified case IDs (up to 100).",
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
       ids: z.array(z.number().int().positive()).min(1).max(100).describe("Case IDs to update"),
@@ -224,14 +252,25 @@ server.registerTool(
       estimate: z.number().int().nonnegative().optional().describe("Time estimate in seconds"),
       tags: z.array(z.string()).optional().describe("Tags (replaces existing)"),
       issues: z.array(z.number().int().positive()).optional().describe("Linked issue IDs"),
-      custom_priority: z.number().int().min(1).max(4).optional().describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
+      custom_priority: z
+        .number()
+        .int()
+        .min(1)
+        .max(4)
+        .optional()
+        .describe("Priority (1=critical, 2=high, 3=medium, 4=low)"),
       custom_description: z.string().optional().describe("Test case description"),
       custom_preconditions: z.string().optional().describe("Preconditions"),
       custom_expected: z.string().optional().describe("Expected result"),
-      custom_steps: z.array(z.object({
-        text1: z.string().describe("Step description"),
-        text3: z.string().optional().describe("Expected result for this step"),
-      })).optional().describe("Test steps (replaces existing)"),
+      custom_steps: z
+        .array(
+          z.object({
+            text1: z.string().describe("Step description"),
+            text3: z.string().optional().describe("Expected result for this step"),
+          })
+        )
+        .optional()
+        .describe("Test steps (replaces existing)"),
     },
   },
   withErrorRecovery("update_cases", async ({ project_id, ...fields }) => {
@@ -283,7 +322,11 @@ server.registerTool(
     annotations: { destructiveHint: true },
     inputSchema: {
       case_id: z.number().int().positive().describe("Test case ID"),
-      attachment_ids: z.array(z.number().int().positive()).min(1).max(100).describe("Attachment IDs to delete"),
+      attachment_ids: z
+        .array(z.number().int().positive())
+        .min(1)
+        .max(100)
+        .describe("Attachment IDs to delete"),
     },
   },
   withErrorRecovery("delete_attachments", async ({ case_id, attachment_ids }) => {
@@ -302,7 +345,13 @@ server.registerTool(
     annotations: { readOnlyHint: true },
     inputSchema: {
       project_id: z.number().int().positive().describe("Project ID"),
-      status: z.number().int().min(0).max(2).optional().describe("Filter by status: 0=open, 1=complete, 2=aborted"),
+      status: z
+        .number()
+        .int()
+        .min(0)
+        .max(2)
+        .optional()
+        .describe("Filter by status: 0=open, 1=complete, 2=aborted"),
       ...paginationSchema,
     },
   },
@@ -369,14 +418,24 @@ server.registerTool(
     description: "Append artifacts, links, or custom fields to an automation run.",
     inputSchema: {
       run_id: z.number().int().positive().describe("Run ID"),
-      artifacts: z.array(z.object({
-        name: z.string().describe("Artifact name"),
-        url: z.string().url().describe("Artifact URL"),
-      })).optional().describe("Artifacts to append"),
-      links: z.array(z.object({
-        name: z.string().describe("Link name"),
-        url: z.string().url().describe("Link URL"),
-      })).optional().describe("Links to append"),
+      artifacts: z
+        .array(
+          z.object({
+            name: z.string().describe("Artifact name"),
+            url: z.string().url().describe("Artifact URL"),
+          })
+        )
+        .optional()
+        .describe("Artifacts to append"),
+      links: z
+        .array(
+          z.object({
+            name: z.string().describe("Link name"),
+            url: z.string().url().describe("Link URL"),
+          })
+        )
+        .optional()
+        .describe("Links to append"),
     },
   },
   withErrorRecovery("append_to_run", async ({ run_id, artifacts, links }) => {
