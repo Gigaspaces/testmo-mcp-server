@@ -187,11 +187,12 @@ server.registerTool(
     description: "Get details of a specific test case.",
     annotations: { readOnlyHint: true },
     inputSchema: {
+      project_id: z.number().int().positive().describe("Project ID"),
       case_id: z.number().int().positive().describe("Test case ID"),
     },
   },
-  withErrorRecovery("get_case", async ({ case_id }) => {
-    const result = await client.getCase(case_id);
+  withErrorRecovery("get_case", async ({ project_id, case_id }) => {
+    const result = await client.getCase(project_id, case_id);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
   })
 );
@@ -228,6 +229,11 @@ server.registerTool(
         )
         .optional()
         .describe("Test steps"),
+      custom_execution_type: z.number().int().positive().optional().describe("Execution type option ID (numeric)"),
+      custom_jira_test_nmber: z.string().optional().describe("Jira test number"),
+      custom_jira_story_link: z.string().optional().describe("Jira story link URL"),
+      custom_status: z.number().int().positive().optional().describe("Status option ID (numeric)"),
+      custom_precondition: z.string().optional().describe("Test case preconditions"),
     },
   },
   withErrorRecovery("create_case", async ({ project_id, ...fields }) => {
@@ -271,6 +277,11 @@ server.registerTool(
         )
         .optional()
         .describe("Test steps (replaces existing)"),
+      custom_execution_type: z.number().int().positive().optional().describe("Execution type option ID (numeric)"),
+      custom_jira_test_nmber: z.string().optional().describe("Jira test number"),
+      custom_jira_story_link: z.string().optional().describe("Jira story link URL"),
+      custom_status: z.number().int().positive().optional().describe("Status option ID (numeric)"),
+      custom_precondition: z.string().optional().describe("Test case preconditions"),
     },
   },
   withErrorRecovery("update_cases", async ({ project_id, ...fields }) => {
