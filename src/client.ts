@@ -119,8 +119,8 @@ export class TestmoClient {
     return this.request(`/projects/${projectId}/cases${query}`);
   }
 
-  async getCase(caseId: number): Promise<{ data: TestmoTestCase }> {
-    return this.request(`/cases/${caseId}`);
+  async getCase(projectId: number, caseId: number): Promise<{ data: TestmoTestCase }> {
+    return this.request(`/projects/${projectId}/cases/${caseId}`);
   }
 
   async createCase(
