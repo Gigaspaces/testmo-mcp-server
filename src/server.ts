@@ -229,6 +229,11 @@ server.registerTool(
         )
         .optional()
         .describe("Test steps"),
+      custom_execution_type: z.number().int().positive().optional().describe("Execution type option ID (numeric)"),
+      custom_jira_test_nmber: z.string().optional().describe("Jira test number"),
+      custom_jira_story_link: z.string().optional().describe("Jira story link URL"),
+      custom_status: z.number().int().positive().optional().describe("Status option ID (numeric)"),
+      custom_precondition: z.string().optional().describe("Test case preconditions"),
     },
   },
   withErrorRecovery("create_case", async ({ project_id, ...fields }) => {
@@ -272,6 +277,11 @@ server.registerTool(
         )
         .optional()
         .describe("Test steps (replaces existing)"),
+      custom_execution_type: z.number().int().positive().optional().describe("Execution type option ID (numeric)"),
+      custom_jira_test_nmber: z.string().optional().describe("Jira test number"),
+      custom_jira_story_link: z.string().optional().describe("Jira story link URL"),
+      custom_status: z.number().int().positive().optional().describe("Status option ID (numeric)"),
+      custom_precondition: z.string().optional().describe("Test case preconditions"),
     },
   },
   withErrorRecovery("update_cases", async ({ project_id, ...fields }) => {
