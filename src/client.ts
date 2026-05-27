@@ -146,7 +146,7 @@ export class TestmoClient {
   async deleteCases(projectId: number, ids: number[]): Promise<void> {
     await this.request(`/projects/${projectId}/cases`, {
       method: "DELETE",
-      body: JSON.stringify({ case_ids: ids }),
+      body: JSON.stringify({ ids }),
     });
   }
 
